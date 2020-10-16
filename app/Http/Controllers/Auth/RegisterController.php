@@ -38,7 +38,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware(['auth:sanctum','admin']);
     }
 
     /**
@@ -50,9 +50,11 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'username' => ['required', 'string', 'max:255'],
+            'NoPIN' => ['required', 'string', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'max:255', 'email'],
+
+            'password' => ['required', 'string', 'min:3', 'confirmed'],
         ]);
     }
 
@@ -65,7 +67,10 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
+            'username' => $data['username'],
+            'NoPIN' => $data['NoPIN'],
+            'role' => $data['role'],
+            'GroupUser' => $data['GroupUser'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
